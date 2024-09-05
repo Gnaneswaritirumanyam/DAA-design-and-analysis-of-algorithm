@@ -1,0 +1,21 @@
+from itertools import combinations
+def subset_sums(arr):
+    sums = set()
+    for i in range(len(arr) + 1):
+        for combo in combinations(arr, i):
+            sums.add(sum(combo))
+    return sums
+def meet_in_the_middle(arr, S):
+    mid = len(arr) // 2
+    left_part = arr[:mid]
+    right_part = arr[mid:]
+    left_sums = subset_sums(left_part)
+    right_sums = subset_sums(right_part)
+    for s in left_sums:
+        if (S - s) in right_sums:
+            return True
+    return False
+arr = [3, 34, 4, 12, 5, 2]
+S = 9
+result = meet_in_the_middle(arr, S)
+print(f"Is there a subset with sum {S}? {'Yes' if result else 'No'}")
