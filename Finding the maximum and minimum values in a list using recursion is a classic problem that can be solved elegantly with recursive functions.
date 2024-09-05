@@ -1,0 +1,8 @@
+def find_max_min(arr, start, end):
+    if start == end:
+        return arr[start], arr[start]
+    if end == start + 1:
+        if arr[start] > arr[end]:
+            return arr[start], arr[end]
+        else:
+            return arr[end], arr[start]
