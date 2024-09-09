@@ -1,0 +1,13 @@
+def string_shift(s, shift):
+    n = len(s)
+    net_shift = 0
+    for direction, amount in shift:
+        if direction == 0:  # Left shift
+            net_shift -= amount
+        else:
+            net_shift += amount
+    net_shift %= n
+    return s[-net_shift:] + s[:-net_shift]
+s = "abc"
+shift = [[0, 1], [1, 2]]
+print(string_shift(s, shift))  # Output: "cab"
