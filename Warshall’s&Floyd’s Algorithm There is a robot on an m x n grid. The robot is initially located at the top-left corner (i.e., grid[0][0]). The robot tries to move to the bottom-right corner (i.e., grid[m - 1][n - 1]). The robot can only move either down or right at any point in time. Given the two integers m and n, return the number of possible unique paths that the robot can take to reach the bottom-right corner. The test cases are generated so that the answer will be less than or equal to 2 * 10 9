@@ -1,0 +1,8 @@
+import math
+def uniquePaths(m, n):
+    steps = (m - 1) + (n - 1)
+    down_steps = m - 1
+    return math.comb(steps, down_steps)
+
+# Example usage
+print(uniquePaths(3, 7))  # Output: 28
