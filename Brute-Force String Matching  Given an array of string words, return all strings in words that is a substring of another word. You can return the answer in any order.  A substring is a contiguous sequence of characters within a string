@@ -1,0 +1,12 @@
+def findSubstrings(words):
+    result = set()
+    for i in range(len(words)):
+        for j in range(len(words)):
+            if i != j:
+                # If the current word is a substring of another word, add to result
+                if words[i] in words[j]:
+                    result.add(words[i])
+    return list(result)
+# Example usage
+words = ["mass", "as", "hero", "superhero"]
+print(findSubstrings(words))
