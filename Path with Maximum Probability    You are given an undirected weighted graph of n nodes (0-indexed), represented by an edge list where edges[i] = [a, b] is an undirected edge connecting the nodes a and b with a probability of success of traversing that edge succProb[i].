@@ -1,0 +1,28 @@
+import heapq
+def maxProbability(n, edges, succProb, start, end):
+    graph = {i: [] for i in range(n)}
+    for (a, b), prob in zip(edges, succProb):
+        graph[a].append((b, prob))
+        graph[b].append((a, prob))
+    max_heap = [(-1, start)]  # Use negative probabilities to simulate a max-heap
+    probabilities = [0] * n
+    probabilities[start] = 1
+    while max_heap:
+        curr_prob, node = heapq.heappop(max_heap)
+        curr_prob = -curr_prob  # Convert back to positive probability
+        if node == end:
+            return curr_prob
+        for neighbor, prob in graph[node]:
+            new_prob = curr_prob * prob
+            if new_prob > probabilities[neighbor]:
+                probabilities[neighbor] = new_prob
+                heapq.heappush(max_heap, (-new_prob, neighbor))
+    return 0
+
+# Example usage
+n = 3
+edges = [[0, 1], [1, 2], [0, 2]]
+succProb = [0.5, 0.5, 0.2]
+start = 0
+end = 2
+print(maxProbability(n, edges, succProb, start, end))  # Output: 0.25
