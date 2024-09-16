@@ -1,0 +1,34 @@
+def fullJustify(words, maxWidth):
+    def justify_line(line_words, width, is_last_line):
+        if len(line_words) == 1:
+            return line_words[0] + ' ' * (width - len(line_words[0]))
+        total_chars = sum(len(word) for word in line_words)
+        total_spaces = width - total_chars
+        num_gaps = len(line_words) - 1
+        if is_last_line:
+            return ' '.join(line_words) + ' ' * (width - len(' '.join(line_words)))
+        even_space = total_spaces // num_gaps
+        extra_space = total_spaces % num_gaps
+        justified_line = ''
+        for i in range(num_gaps):
+            justified_line += line_words[i] + ' ' * (even_space + (1 if i < extra_space else 0))
+        justified_line += line_words[-1]  # add the last word without additional space
+        return justified_line
+    result = []
+    current_line = []
+    current_length = 0
+    for word in words:
+        if current_length + len(word) + len(current_line) > maxWidth:
+            result.append(justify_line(current_line, maxWidth, False))
+            current_line = []
+            current_length = 0
+        current_line.append(word)
+        current_length += len(word)
+    result.append(justify_line(current_line, maxWidth, True))
+    return result
+# Example usage
+words = ["This", "is", "an", "example", "of", "text", "justification."]
+maxWidth = 16
+formatted_text = fullJustify(words, maxWidth)
+for line in formatted_text:
+    print(f'"{line}"')
