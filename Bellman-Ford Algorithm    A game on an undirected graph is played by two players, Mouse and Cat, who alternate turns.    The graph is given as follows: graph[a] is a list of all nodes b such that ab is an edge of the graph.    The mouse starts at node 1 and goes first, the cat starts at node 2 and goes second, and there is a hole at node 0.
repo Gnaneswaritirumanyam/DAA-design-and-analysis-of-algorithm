@@ -1,0 +1,33 @@
+from collections import deque
+def catMouseGame(graph):
+    n = len(graph)
+    queue = deque()
+    visited = set()
+    queue.append((1, 2, True))
+    visited.add((1, 2, True))
+    MOUSE_WIN = 1
+    CAT_WIN = 2
+    DRAW = 0
+    while queue:
+        mouse_pos, cat_pos, is_mouse_turn = queue.popleft()
+        if mouse_pos == 0:
+            return MOUSE_WIN
+        if mouse_pos == cat_pos:
+            return CAT_WIN
+        if is_mouse_turn:
+            for next_mouse in graph[mouse_pos]:
+                if next_mouse == cat_pos:
+                    continue
+                new_state = (next_mouse, cat_pos, not is_mouse_turn)
+                if new_state not in visited:
+                    visited.add(new_state)
+                    queue.append(new_state)
+        else:
+            for next_cat in graph[cat_pos]:
+                if next_cat == 0:
+                    continue
+                new_state = (mouse_pos, next_cat, not is_mouse_turn)
+                if new_state not in visited:
+                    visited.add(new_state)
+                    queue.append(new_state)
+    return DRAW
