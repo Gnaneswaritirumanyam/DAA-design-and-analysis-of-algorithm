@@ -1,0 +1,21 @@
+class WordFilter:
+    def __init__(self, words):
+        self.word_map = {}
+        for index, word in enumerate(words):
+            length = len(word)
+            for prefix_len in range(length + 1):
+                prefix = word[:prefix_len]
+                for suffix_len in range(length + 1):
+                    suffix = word[-suffix_len:] if suffix_len > 0 else ""
+                    key = f"{prefix}|{suffix}"
+                    self.word_map[key] = index
+    def f(self, pref, suff):
+        key = f"{pref}|{suff}"
+        return self.word_map.get(key, -1)
+words = ["apple", "banana", "grape"]
+wf = WordFilter(words)
+print(wf.f("a", "e"))  # Output: 0 (apple)
+print(wf.f("b", "a"))  # Output: 1 (banana)
+print(wf.f("g", "e"))  # Output: 2 (grape)
+print(wf.f("ap", "le"))  # Output: 0 (apple)
+print(wf.f("ba", "na"))  # Output: 1 (banana)
