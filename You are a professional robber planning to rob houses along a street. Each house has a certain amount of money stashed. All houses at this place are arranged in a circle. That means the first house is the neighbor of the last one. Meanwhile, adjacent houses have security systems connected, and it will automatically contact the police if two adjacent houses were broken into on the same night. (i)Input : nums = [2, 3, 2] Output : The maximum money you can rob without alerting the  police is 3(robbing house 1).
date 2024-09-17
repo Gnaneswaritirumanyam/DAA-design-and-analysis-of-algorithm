@@ -1,0 +1,21 @@
+def rob_linear(nums):
+    if not nums:
+        return 0
+    if len(nums) == 1:
+        return nums[0]
+    prev1, prev2 = 0, 0
+    for num in nums:
+        curr = max(prev1, prev2 + num)
+        prev2 = prev1
+        prev1 = curr
+    return prev1
+def rob_circle(nums):
+    if len(nums) == 1:
+        return nums[0]
+    rob1 = rob_linear(nums[:-1])
+    rob2 = rob_linear(nums[1:]) 
+    return max(rob1, rob2)
+
+# Example usage
+nums = [2, 3, 2]
+print(rob_circle(nums))  # Output: 3
