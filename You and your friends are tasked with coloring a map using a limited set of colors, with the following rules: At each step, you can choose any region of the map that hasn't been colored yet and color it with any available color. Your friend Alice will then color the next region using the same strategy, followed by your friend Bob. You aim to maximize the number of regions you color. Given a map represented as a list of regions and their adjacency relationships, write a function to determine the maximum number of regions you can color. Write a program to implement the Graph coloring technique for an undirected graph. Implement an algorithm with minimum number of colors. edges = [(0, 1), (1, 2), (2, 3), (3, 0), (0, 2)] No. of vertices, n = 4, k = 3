@@ -1,0 +1,54 @@
+def is_safe(graph, color, vertex, c):
+    for i in range(len(graph)):
+        if graph[vertex][i] == 1 and color[i] == c:
+            return False
+    return True
+def graph_coloring_util(graph, k, color, vertex):
+    if vertex == len(graph):
+        return True
+    for c in range(1, k + 1):
+        if is_safe(graph, color, vertex, c):
+            color[vertex] = c
+            if graph_coloring_util(graph, k, color, vertex + 1):
+                return True
+            color[vertex] = 0
+    return False
+def find_minimum_colors(graph):
+    num_vertices = len(graph)
+    for k in range(1, num_vertices + 1):
+        color = [0] * num_vertices
+        if graph_coloring_util(graph, k, color, 0):
+            return k
+    return num_vertices  
+def max_regions_colored(graph, k):
+    num_vertices = len(graph)
+    color = [0] * num_vertices
+    turn = 0 
+    def assign_colors(vertex):
+        nonlocal turn
+        if vertex == num_vertices:
+            return
+        for c in range(1, k + 1):
+            if is_safe(graph, color, vertex, c):
+                color[vertex] = c
+                turn = (turn + 1) % 3
+                assign_colors(vertex + 1)
+                if turn == 0:  # When it's your turn again
+                    break
+                color[vertex] = 0
+    assign_colors(0)
+    return color.count(1)
+def main():
+    edges = [(0, 1), (1, 2), (2, 3), (3, 0), (0, 2)]
+    n = 4 
+    k = 3 
+    graph = [[0] * n for _ in range(n)]
+    for u, v in edges:
+        graph[u][v] = 1
+        graph[v][u] = 1
+    min_colors = find_minimum_colors(graph)
+    max_colored = max_regions_colored(graph, k)
+    print(f"Minimum number of colors needed: {min_colors}")
+    print(f"Maximum number of regions you can color: {max_colored}")
+if __name__ == "__main__":
+    main()
