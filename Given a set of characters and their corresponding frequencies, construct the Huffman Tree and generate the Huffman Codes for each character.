@@ -1,0 +1,40 @@
+import heapq
+from collections import defaultdict, namedtuple
+class Node:
+    def __init__(self, char, freq):
+        self.char = char
+        self.freq = freq
+        self.left = None
+        self.right = None
+    def __lt__(self, other):
+        return self.freq < other.freq
+def build_huffman_tree(chars, freqs):
+    heap = [Node(char, freq) for char, freq in zip(chars, freqs)]
+    heapq.heapify(heap)
+    while len(heap) > 1:
+        left = heapq.heappop(heap)
+        right = heapq.heappop(heap)
+        merged = Node(None, left.freq + right.freq)
+        merged.left = left
+        merged.right = right
+        heapq.heappush(heap, merged)
+    return heap[0]
+def generate_huffman_codes(root):
+    def generate_codes(node, prefix, codes):
+        if node is not None:
+            if node.char is not None:
+                codes[node.char] = prefix
+            generate_codes(node.left, prefix + '0', codes)
+            generate_codes(node.right, prefix + '1', codes)
+    codes = {}
+    generate_codes(root, '', codes)
+    return codes
+
+# Example usage
+chars = ['a', 'b', 'c', 'd']
+freqs = [5, 9, 12, 13]
+root = build_huffman_tree(chars, freqs)
+codes = generate_huffman_codes(root)
+# Sort the codes based on characters for the output format
+sorted_codes = sorted(codes.items())
+print(sorted_codes)  # Output: [('a', '110'), ('b', '10'), ('c', '0'), ('d', '111')]
