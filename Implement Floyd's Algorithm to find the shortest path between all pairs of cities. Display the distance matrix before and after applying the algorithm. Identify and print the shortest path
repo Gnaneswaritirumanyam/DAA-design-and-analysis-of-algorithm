@@ -1,0 +1,56 @@
+import numpy as np
+def floyd_warshall(graph):
+    num_vertices = len(graph)
+    dist = np.array(graph, dtype=float)
+    next_node = np.zeros((num_vertices, num_vertices), dtype=int)
+    for i in range(num_vertices):
+        for j in range(num_vertices):
+            if graph[i][j] < float('inf') and i != j:
+                next_node[i][j] = j
+            else:
+                next_node[i][j] = -1
+    for k in range(num_vertices):
+        for i in range(num_vertices):
+            for j in range(num_vertices):
+                if dist[i][j] > dist[i][k] + dist[k][j]:
+                    dist[i][j] = dist[i][k] + dist[k][j]
+                    next_node[i][j] = next_node[i][k]
+    return dist, next_node
+def print_solution(dist, next_node):
+    num_vertices = len(dist)
+    print("Distance Matrix:")
+    for row in dist:
+        print(" ".join(f"{elem:7}" if elem != float('inf') else "INF" for elem in row))
+    print("\nShortest Paths:")
+    for i in range(num_vertices):
+        for j in range(num_vertices):
+            if i != j:
+                path = reconstruct_path(next_node, i, j)
+                print(f"Shortest path from {i} to {j}: {' -> '.join(map(str, path))} with distance {dist[i][j]}")
+def reconstruct_path(next_node, start, end):
+    path = []
+    if next_node[start][end] == -1:
+        return path
+    while start != end:
+        path.append(start)
+        start = next_node[start][end]
+    path.append(end)
+    return path
+def main():
+    graph = [
+        [0, 3, float('inf'), float('inf'), float('inf')],
+        [float('inf'), 0, 1, float('inf'), 7],
+        [float('inf'), float('inf'), 0, 2, float('inf')],
+        [float('inf'), float('inf'), float('inf'), 0, 1],
+        [float('inf'), float('inf'), float('inf'), float('inf'), 0]
+    ]
+    print("Initial Distance Matrix:")
+    for row in graph:
+        print(" ".join(f"{elem:7}" if elem != float('inf') else "INF" for elem in row))
+
+    dist, next_node = floyd_warshall(graph)
+    
+    print("\nDistance Matrix after Floyd-Warshall Algorithm:")
+    print_solution(dist, next_node)
+if __name__ == "__main__":
+    main()
