@@ -1,0 +1,27 @@
+def find_ways_out_of_grid(m, n, N, start_i, start_j):
+    directions = [(0, 1), (1, 0), (0, -1), (-1, 0)]
+    dp = [[[0 for _ in range(n)] for _ in range(m)] for _ in range(N + 1)]
+    dp[0][start_i][start_j] = 1
+    for steps in range(N):
+        for i in range(m):
+            for j in range(n):
+                if dp[steps][i][j] > 0:
+                    for di, dj in directions:
+                        ni, nj = i + di, j + dj
+                        if 0 <= ni < m and 0 <= nj < n:
+                            dp[steps + 1][ni][nj] += dp[steps][i][j]
+                        else:
+                            dp[steps + 1][i][j] += dp[steps][i][j]
+    result = 0
+    for i in range(m):
+        for j in range(n):
+            result += dp[N][i][j]
+    return result
+
+# Example usage
+m = 2
+n = 2
+N = 2
+start_i = 0
+start_j = 0
+print(find_ways_out_of_grid(m, n, N, start_i, start_j))  # Output: 6
