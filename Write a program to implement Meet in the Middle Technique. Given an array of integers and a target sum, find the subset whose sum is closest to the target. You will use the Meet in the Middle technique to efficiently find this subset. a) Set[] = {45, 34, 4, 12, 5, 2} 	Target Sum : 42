@@ -1,0 +1,33 @@
+from itertools import combinations
+import bisect
+def subset_sums(arr):
+    sums = []
+    n = len(arr)
+    for r in range(n + 1):
+        for combo in combinations(arr, r):
+            sums.append(sum(combo))
+    return sums
+def find_closest_subset_sum(arr, target):
+    n = len(arr)
+    mid = n // 2
+    left_half = arr[:mid]
+    right_half = arr[mid:]
+    left_sums = subset_sums(left_half)
+    right_sums = subset_sums(right_half)
+    right_sums.sort()
+    closest_sum = float('inf')
+    for ls in left_sums:
+        complement = target - ls
+        idx = bisect.bisect_left(right_sums, complement)
+        if idx < len(right_sums):
+            closest_sum = min(closest_sum, abs((ls + right_sums[idx]) - target))
+        if idx > 0:
+            closest_sum = min(closest_sum, abs((ls + right_sums[idx - 1]) - target))
+    return closest_sum
+
+# Example usage
+set_array = [45, 34, 4, 12, 5, 2]
+target_sum = 42
+
+closest_sum = find_closest_subset_sum(set_array, target_sum)
+print(f"The closest subset sum to {target_sum} is {closest_sum}")
