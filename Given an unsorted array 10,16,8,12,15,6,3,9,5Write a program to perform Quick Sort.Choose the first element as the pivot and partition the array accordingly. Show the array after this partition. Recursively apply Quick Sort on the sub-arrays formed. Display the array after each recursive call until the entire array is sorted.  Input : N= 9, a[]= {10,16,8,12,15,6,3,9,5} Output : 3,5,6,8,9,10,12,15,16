@@ -1,0 +1,35 @@
+def quick_sort(arr):
+    if len(arr) <= 1:
+        return arr
+    
+    # Choose the first element as the pivot
+    pivot = arr[0]
+    left = []
+    right = []
+    
+    # Partitioning step
+    for x in arr[1:]:
+        if x < pivot:
+            left.append(x)
+        else:
+            right.append(x)
+    
+    # Show the array after this partition
+    partitioned_array = left + [pivot] + right
+    print("After partitioning:", partitioned_array)
+    
+    # Recursively apply Quick Sort on the left and right sub-arrays
+    sorted_left = quick_sort(left)
+    sorted_right = quick_sort(right)
+    
+    # Combine the sorted arrays and return
+    return sorted_left + [pivot] + sorted_right
+
+# Input
+arr = [10, 16, 8, 12, 15, 6, 3, 9, 5]
+
+# Perform Quick Sort
+sorted_array = quick_sort(arr)
+
+# Output the final sorted array
+print("Sorted array:", sorted_array)
