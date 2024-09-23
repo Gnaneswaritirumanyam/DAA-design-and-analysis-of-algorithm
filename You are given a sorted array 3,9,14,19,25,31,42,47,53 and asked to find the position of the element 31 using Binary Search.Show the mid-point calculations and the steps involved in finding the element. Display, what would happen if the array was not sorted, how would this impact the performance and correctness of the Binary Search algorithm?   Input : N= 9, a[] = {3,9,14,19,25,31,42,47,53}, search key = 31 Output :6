@@ -1,0 +1,21 @@
+def binary_search(arr, search_key):
+    low = 0
+    high = len(arr) - 1
+
+    while low <= high:
+        mid = (low + high) // 2
+        if arr[mid] == search_key:
+            return mid  # Return the index of the found element
+        elif arr[mid] < search_key:
+            low = mid + 1  # Search in the right half
+        else:
+            high = mid - 1  # Search in the left half
+
+    return -1  # Return -1 if the element is not found
+arr = [3, 9, 14, 19, 25, 31, 42, 47, 53]
+search_key = 31
+position = binary_search(arr, search_key)
+if position != -1:
+    print("Output:", position + 1)
+else:
+    print("Element not found")
